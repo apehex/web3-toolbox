@@ -1,6 +1,6 @@
 import pytest
 
-from forta_toolkit.logging import setup_log_format
+from forta_toolkit.logging import setup_log_format, setup_logger
 
 # FORMAT ######################################################################
 
