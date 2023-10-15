@@ -3,7 +3,7 @@
 import logging
 import sys
 
-import forta_toolkit.metadata
+import forta_toolkit.parsing.metadata
 
 # FORMAT ######################################################################
 
@@ -14,7 +14,7 @@ def setup_log_format(pattern: str=MESSAGE_PATTERN, version: str='') -> str:
     __version = version
     # try reading the package metadata
     if not __version:
-        __version = forta_toolkit.metadata.get_bot_version()
+        __version = forta_toolkit.parsing.metadata.get_bot_version()
     # include the bot version in the log message if known
     if __version:
         __version = __version + ' - '

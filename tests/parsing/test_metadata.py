@@ -1,6 +1,6 @@
 import pytest
 
-import forta_toolkit.metadata
+import forta_toolkit.parsing.metadata
 
 # CHAIN ID ####################################################################
 
