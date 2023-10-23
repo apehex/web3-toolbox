@@ -12,11 +12,13 @@ def parse_transaction_data(log: forta_agent.transaction_event.TransactionEvent, 
         'sender': forta_toolkit.parsing.address.format_with_checksum(getattr(log.transaction, 'from_', '')),
         'recipient': forta_toolkit.parsing.address.format_with_checksum(getattr(log.transaction, 'to', '')),
         'data': log.transaction.data,
+        'traces': log.traces
         'bytecode': ''}
-    # contract creation
-    if not __data['recipient']:
-        __data['bytecode'] = __data['data'] # use creation bytecode which contains runtime bytecode
     # exclude transactions that are not involving a contract
     if (len(__data['data']) > 2): # counting the prefix
-        __data['bytecode'] = get_code(__data['recipient']).hex()
+        # contract creation
+        if not __data['recipient']:
+            __data['bytecode'] = __data['data'] # use creation bytecode which contains runtime bytecode
+        else:
+            __data['bytecode'] = get_code(__data['recipient']).hex()
     return __data
