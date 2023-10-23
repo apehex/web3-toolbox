@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "forta-toolkit"
-version = "0.1.8"
+version = "0.1.9"
 description = "Tools to help with the common problems of Forta bot development"
 authors = ["apehex <apehex@protonmail.com>"]
 readme = ".github/README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.9"
 forta_agent = "*"
 web3 = "*"
 
