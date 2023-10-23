@@ -54,6 +54,8 @@ For example, if your bot triggers `ALERT-1` every 2k transactions and `ALERT-2` 
 
 ### Logging execution events
 
+### Load balancing
+
 ### Profiling
 
 The bots have to follow the pace of the blockchain, so they need to process transactions relatively quickly.
