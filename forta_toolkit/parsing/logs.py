@@ -12,7 +12,7 @@ def parse_transaction_data(log: forta_agent.transaction_event.TransactionEvent, 
         'sender': forta_toolkit.parsing.address.format_with_checksum(getattr(log.transaction, 'from_', '')),
         'recipient': forta_toolkit.parsing.address.format_with_checksum(getattr(log.transaction, 'to', '')),
         'data': log.transaction.data,
-        'traces': log.traces
+        'traces': log.traces,
         'bytecode': ''}
     # exclude transactions that are not involving a contract
     if (len(__data['data']) > 2): # counting the prefix
