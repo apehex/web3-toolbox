@@ -6,11 +6,11 @@ import forta_toolkit.parsing.address
 
 # TRACES ######################################################################
 
-def parse_trace_data(trace: dict, get_code: callable) -> dict:
+def parse_trace_data(trace: dict) -> dict:
     """Flatten and format all the data in a transaction trace."""
     # common
     __block = getattr(trace, 'block_number', getattr(trace, 'blockNumber', -1))
-    __hash = getattr(trace, 'transaction_hash', getattr(trace, 'transactionHash', hexbytes.HexBytes('0x'))).hex()
+    __hash = getattr(trace, 'transaction_hash', getattr(trace, 'transactionHash', '0x'))
     __type = getattr(trace, 'type', '')
     __action = getattr(trace, 'action', {})
     __result = getattr(trace, 'result', {})
@@ -32,18 +32,23 @@ def parse_trace_data(trace: dict, get_code: callable) -> dict:
         __data['type'] = getattr(__action, 'call_type', getattr(__action, 'callType', 'call')) # actually get the exact variant of the call
         __data['from'] = forta_toolkit.parsing.address.format_with_checksum(getattr(__action, 'from_', getattr(__action, 'from', '')))
         __data['to'] = forta_toolkit.parsing.address.format_with_checksum(getattr(__action, 'to', ''))
-        __data['input'] = getattr(__action, 'input', hexbytes.HexBytes('0x')).hex()
-        __data['output'] = getattr(__result, 'output', hexbytes.HexBytes('0x')).hex()
+        __data['input'] = getattr(__action, 'input', '0x')
+        __data['output'] = getattr(__result, 'output', '0x')
     # create
     if __type == 'create':
         __data['from'] = forta_toolkit.parsing.address.format_with_checksum(getattr(__action, 'from_', getattr(__action, 'from', '')))
         __data['to'] = forta_toolkit.parsing.address.format_with_checksum(getattr(__result, 'address', ''))
-        __data['input'] = getattr(__action, 'init', hexbytes.HexBytes('0x')).hex()
-        __data['output'] = getattr(__result, 'code', hexbytes.HexBytes('0x')).hex()
+        __data['input'] = getattr(__action, 'init', '0x')
+        __data['output'] = getattr(__result, 'code', '0x')
     # suicide
     if __type == 'suicide':
         __data['from'] = forta_toolkit.parsing.address.format_with_checksum(getattr(__action, 'address', ''))
         __data['to'] = forta_toolkit.parsing.address.format_with_checksum(getattr(__action, 'refund_address', getattr(__action, 'refundAddress', '')))
-        __data['input'] = getattr(__action, 'balance', hexbytes.HexBytes('0x')).hex()
+        __data['input'] = getattr(__action, 'balance', '0x0')
         __data['output'] = '0x'
+    # convert bytes to hex string
+    for __k in __data:
+        if isinstance(__data[__k], hexbytes.HexBytes):
+            __data[__k] = (__data[__k]).hex()
+    # output
     return __data
