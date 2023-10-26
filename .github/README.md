@@ -2,6 +2,21 @@
 
 Various tools to help with the common problems of Forta bot development.
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Alert statistics](#alert-statistics)
+  - [Logging execution events](#logging-execution-events)
+  - [Improving performances](#improving-performances)
+  - [Load balancing](#load-balancing)
+  - [Profiling](#profiling)
+- [Development](#development)
+  - [Changelog](#changelog)
+  - [Todo](#todo)
+- [Credits](#credits)
+- [License](#license)
+
 ## Installation
 
 ```bash
@@ -50,9 +65,9 @@ It will use the field `alert_id` from the `Finding` objects to identify them.
 For example, if your bot triggers `ALERT-1` every 2k transactions and `ALERT-2` every 10k on average:
 `@alert_history(size=100000)` would gather enough alerts to have a relevant estimation of the rate of both alerts.
 
-### Improving performances
-
 ### Logging execution events
+
+### Improving performances
 
 ### Load balancing
 
@@ -83,3 +98,25 @@ Then you can parse the profile logs manually with `pstats` or:
 ```python
 display_performances(logpath='some/path/to/the/logs/handle_transaction')
 ```
+
+## Development
+
+Contributions welcome!
+
+### Changelog
+
+See [CHANGELOG](CHANGELOG.md).
+
+### Todo
+
+See [TODO](TODO.md).
+
+## Credits
+
+The RPC request queue was inspired by the [TS module `forta-helpers`][github-kovart-helpers] by Artem Kovalchuk.
+
+## License
+
+Licensed under the [aGPL v3](LICENSE).
+
+[github-kovart-helpers]: https://github.com/kovart/forta-helpers/blob/main/src/queue.ts
