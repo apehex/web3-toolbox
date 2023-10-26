@@ -9,7 +9,7 @@ import forta_toolkit.parsing.address
 def parse_trace_data(trace: dict) -> dict:
     """Flatten and format all the data in a transaction trace."""
     # common
-    __block = getattr(trace, 'block_number', getattr(trace, 'blockNumber', -1))
+    __block = getattr(trace, 'block_number', getattr(trace, 'blockNumber', 0))
     __hash = getattr(trace, 'transaction_hash', getattr(trace, 'transactionHash', '0x'))
     __type = getattr(trace, 'type', '')
     __action = getattr(trace, 'action', {})
@@ -46,9 +46,14 @@ def parse_trace_data(trace: dict) -> dict:
         __data['to'] = forta_toolkit.parsing.address.format_with_checksum(getattr(__action, 'refund_address', getattr(__action, 'refundAddress', '')))
         __data['input'] = getattr(__action, 'balance', '0x0')
         __data['output'] = '0x'
-    # convert bytes to hex string
+    # sanitize and have all the data in HEX strings format
     for __k in __data:
+        # convert bytes to hex string
         if isinstance(__data[__k], hexbytes.HexBytes):
             __data[__k] = (__data[__k]).hex()
+        if isinstance(__data[__k], int):
+            __data[__k] = hex(__data[__k])
+        if not __data[__k]: # catches None values too
+            __data[__k] = '0x'
     # output
     return __data

@@ -1,10 +1,11 @@
 # Changelog
 
-## v0.1.11
+## v0.1.11 - v0.1.13
 
 ### Changes
 
 - parse both Forta and std RPC formats for the traces (`transaction_hash` vs `transactionHash`)
+- sanitize and format all the data as HEX strings
 
 ## v0.1.10
 
