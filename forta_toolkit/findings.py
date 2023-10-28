@@ -4,7 +4,7 @@ import forta_agent
 
 # METADATA ####################################################################
 
-def default_get_alert_metadata(chain_id: int, tx_hash: str, sender: str, recipient: str, confidence: float, **kwargs) -> str:
+def default_get_alert_metadata(chain_id: int, tx_hash: str, sender: str, recipient: str, confidence: float, **kwargs) -> dict:
     """Generate the alert metadata."""
     return {
         'chain_id': str(chain_id),
@@ -24,7 +24,7 @@ def format_finding_factory(
     get_alert_labels: callable,
     get_alert_log: callable,
     get_alert_metadata: callable=default_get_alert_metadata
-) -> Finding:
+) -> forta_agent.Finding:
     """Prepare a formatting function for a specific bot."""
     def __format_finding(**kwargs) -> Finding:
         """Structure all the metadata of the transaction in a Forta "Finding" object."""
