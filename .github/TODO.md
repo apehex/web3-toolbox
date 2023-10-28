@@ -8,9 +8,11 @@
 
 ## Indexing
 
-[ ] transparent indexing
+[ ] transparent indexing:
+    [ ] use Parquet files / DB
 [ ] scrape Zettablock?
 [ ] use cryo to cache all the data?
+[ ] collect evidence => address, bytecode, deployer, tx, labels, etc upon detection
 
 ## Testing
 

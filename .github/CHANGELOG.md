@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.14
+
+### Additions
+
+- generic function to format detection data into a Forta alert object with labels
+
 ## v0.1.11 - v0.1.13
 
 ### Changes
