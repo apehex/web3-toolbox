@@ -1,7 +1,5 @@
 """Format transaction traces."""
 
-import hexbytes
-
 import forta_toolkit.parsing.address
 
 # TRACES ######################################################################
@@ -49,7 +47,7 @@ def parse_trace_data(trace: dict) -> dict:
     # sanitize and have all the data in HEX strings format
     for __k in __data:
         # convert bytes to hex string
-        if isinstance(__data[__k], hexbytes.HexBytes):
+        if isinstance(__data[__k], bytes):
             __data[__k] = (__data[__k]).hex()
         if isinstance(__data[__k], int):
             __data[__k] = hex(__data[__k])

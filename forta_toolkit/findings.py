@@ -28,8 +28,6 @@ def format_finding_factory(
     """Prepare a formatting function for a specific bot."""
     def __format_finding(**kwargs) -> forta_agent.Finding:
         """Structure all the metadata of the transaction in a Forta "Finding" object."""
-        # keep a trace on the node
-        logging.info(get_alert_log(**kwargs))
         # raise a Forta network alert
         return forta_agent.Finding({
             'alert_id': get_alert_id(**kwargs),

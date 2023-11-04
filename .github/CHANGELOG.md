@@ -1,6 +1,16 @@
 # Changelog
 
-## v0.1.14 - v0.1.16
+## v0.1.18
+
+### Changes
+
+- remove the log of findings in `format_findings_factory`
+
+### Additions
+
+- parse, sanitize & flatten event logs
+
+## v0.1.14 - v0.1.17
 
 ### Additions
 

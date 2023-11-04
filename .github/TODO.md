@@ -12,7 +12,8 @@
     [ ] use Parquet files / DB
 [ ] scrape Zettablock?
 [ ] use cryo to cache all the data?
-[ ] collect evidence => address, bytecode, deployer, tx, labels, etc upon detection
+[ ] collect evidence:
+    [ ] => address, bytecode, deployer, tx, labels, etc upon detection
 
 ## Testing
 
@@ -21,3 +22,16 @@
     [ ] metamorphic tx
     [ ] meta traces
     [ ] random traces & transactions
+[ ] modules:
+    [x] alerts
+    [ ] findings
+    [ ] indexing
+    [x] logging
+    [ ] parsing:
+        [x] address
+        [ ] metadata
+        [x] traces
+        [x] event logs
+        [x] transactions
+    [ ] profiling
+    [ ] scraping
