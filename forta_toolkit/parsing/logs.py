@@ -8,12 +8,12 @@ import forta_toolkit.parsing.address
 # for __log in logs: __log.topics = tuple(HexBytes(__topic) for __topic in __log.topics)
 
 def parse_log_data(log: dict) -> dict:
-    """Flatten and format all the data in a transaction trace."""
+    """Flatten and format all the data in an event log."""
     # init
     __data = {
-        'block': getattr(log, 'block_number', getattr(trace, 'blockNumber', 0)),
-        'hash': getattr(trace, 'transaction_hash', getattr(trace, 'transactionHash', '0x')),
-        'index': getattr(log, 'log_index', getattr(trace, 'logIndex', 0)),
+        'block': getattr(log, 'block_number', getattr(log, 'blockNumber', 0)),
+        'hash': getattr(log, 'transaction_hash', getattr(log, 'transactionHash', '0x')),
+        'index': getattr(log, 'log_index', getattr(log, 'logIndex', 0)),
         'address': forta_toolkit.parsing.address.format_with_checksum(getattr(log, 'address', '')),
         'topics': [bytes.fromhex(__t) for __t in getattr(log, 'topics', [])],
         'data': getattr(log, 'data', '0x'),}
