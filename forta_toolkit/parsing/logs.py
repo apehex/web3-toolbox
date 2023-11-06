@@ -1,6 +1,6 @@
 """Format event logs."""
 
-import forta_toolkit.parsing.address
+import forta_toolkit._utils
 import forta_toolkit.parsing.address
 
 # TRACES ######################################################################
@@ -15,7 +15,7 @@ def parse_log_data(log: dict) -> dict:
         'hash': getattr(log, 'transaction_hash', getattr(log, 'transactionHash', '0x')),
         'index': getattr(log, 'log_index', getattr(log, 'logIndex', 0)),
         'address': forta_toolkit.parsing.address.format_with_checksum(getattr(log, 'address', '')),
-        'topics': [bytes.fromhex(__t) for __t in getattr(log, 'topics', [])],
+        'topics': [forta_toolkit._utils.to_bytes(__t) for __t in getattr(log, 'topics', [])],
         'data': getattr(log, 'data', '0x'),}
     # aliases
     __data['blockHash'] = getattr(log, 'block_hash', getattr(log, 'blockHash', '0x'))
