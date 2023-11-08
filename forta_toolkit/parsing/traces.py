@@ -1,57 +1,44 @@
 """Format transaction traces."""
 
 import forta_toolkit.parsing.address
+import forta_toolkit.parsing.common
 
 # TRACES ######################################################################
 
 def parse_trace_data(trace: dict) -> dict:
     """Flatten and format all the data in a transaction trace."""
     # common
-    __block = getattr(trace, 'block_number', getattr(trace, 'blockNumber', 0))
-    __hash = getattr(trace, 'transaction_hash', getattr(trace, 'transactionHash', '0x'))
-    __type = getattr(trace, 'type', '')
-    __action = getattr(trace, 'action', {})
-    __result = getattr(trace, 'result', {})
-    __value = getattr(__action, 'value', 0)
-    __gas = getattr(__result, 'gas_used', getattr(__result, 'gasUsed', 0))
-    # output
+    __action = forta_toolkit.parsing.common.get_field(dataset=trace, keys=('action',), default={})
+    __result = forta_toolkit.parsing.common.get_field(dataset=trace, keys=('result',), default={})
+    # common
     __data = {
-        'block': __block,
-        'hash': __hash,
-        'type': __type,
-        'value': __value,
-        'gas': __gas,
+        'block': forta_toolkit.parsing.common.get_field(dataset=trace, keys=('block_number', 'blockNumber'), default=0),
+        'hash': forta_toolkit.parsing.common.get_field(dataset=trace, keys=('transaction_hash', 'transactionHash'), default='0x', callback=forta_toolkit.parsing.common.to_hexstr),
+        'type': forta_toolkit.parsing.common.get_field(dataset=trace, keys=('type',), default=''),
+        'value': forta_toolkit.parsing.common.get_field(dataset=trace, keys=('value',), default=0),
+        'gas': forta_toolkit.parsing.common.get_field(dataset=trace, keys=('gas_used', 'gasUsed'), default=0),
         'from': '',
         'to': '',
         'input': '',
         'output': ''}
     # call
-    if __type == 'call':
-        __data['type'] = getattr(__action, 'call_type', getattr(__action, 'callType', 'call')) # actually get the exact variant of the call
-        __data['from'] = forta_toolkit.parsing.address.format_with_checksum(getattr(__action, 'from_', getattr(__action, 'from', '')))
-        __data['to'] = forta_toolkit.parsing.address.format_with_checksum(getattr(__action, 'to', ''))
-        __data['input'] = getattr(__action, 'input', '0x')
-        __data['output'] = getattr(__result, 'output', '0x')
+    if __data['type'] == 'call':
+        __data['type'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('call_type', 'callType'), default='call') # actually get the exact variant of the call
+        __data['from'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('from', 'from_'), default='', callback=forta_toolkit.parsing.address.format_with_checksum)
+        __data['to'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('to',), default='', callback=forta_toolkit.parsing.address.format_with_checksum)
+        __data['input'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('input',), default='0x', callback=forta_toolkit.parsing.common.to_hexstr)
+        __data['output'] = forta_toolkit.parsing.common.get_field(dataset=__result, keys=('output',), default='0x', callback=forta_toolkit.parsing.common.to_hexstr)
     # create
-    if __type == 'create':
-        __data['from'] = forta_toolkit.parsing.address.format_with_checksum(getattr(__action, 'from_', getattr(__action, 'from', '')))
-        __data['to'] = forta_toolkit.parsing.address.format_with_checksum(getattr(__result, 'address', ''))
-        __data['input'] = getattr(__action, 'init', '0x')
-        __data['output'] = getattr(__result, 'code', '0x')
+    if __data['type'] == 'create':
+        __data['from'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('from', 'from_'), default='', callback=forta_toolkit.parsing.address.format_with_checksum)
+        __data['to'] = forta_toolkit.parsing.common.get_field(dataset=__result, keys=('address',), default='', callback=forta_toolkit.parsing.address.format_with_checksum)
+        __data['input'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('init',), default='0x', callback=forta_toolkit.parsing.common.to_hexstr)
+        __data['output'] = forta_toolkit.parsing.common.get_field(dataset=__result, keys=('code',), default='0x', callback=forta_toolkit.parsing.common.to_hexstr)
     # suicide
-    if __type == 'suicide':
-        __data['from'] = forta_toolkit.parsing.address.format_with_checksum(getattr(__action, 'address', ''))
-        __data['to'] = forta_toolkit.parsing.address.format_with_checksum(getattr(__action, 'refund_address', getattr(__action, 'refundAddress', '')))
-        __data['input'] = getattr(__action, 'balance', '0x0')
+    if __data['type'] == 'suicide':
+        __data['from'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('address',), default='', callback=forta_toolkit.parsing.address.format_with_checksum)
+        __data['to'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('refund_address', 'refundAddress'), default='', callback=forta_toolkit.parsing.address.format_with_checksum)
+        __data['input'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('balance',), default='0x', callback=forta_toolkit.parsing.common.to_hexstr)
         __data['output'] = '0x'
-    # sanitize and have all the data in HEX strings format
-    for __k in __data:
-        # convert bytes to hex string
-        if isinstance(__data[__k], bytes):
-            __data[__k] = (__data[__k]).hex()
-        if isinstance(__data[__k], int):
-            __data[__k] = hex(__data[__k])
-        if not __data[__k]: # catches None values too
-            __data[__k] = '0x'
     # output
     return __data

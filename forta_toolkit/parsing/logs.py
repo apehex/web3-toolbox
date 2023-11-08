@@ -1,7 +1,7 @@
 """Format event logs."""
 
-import forta_toolkit._utils
 import forta_toolkit.parsing.address
+import forta_toolkit.parsing.common
 
 # TRACES ######################################################################
 
@@ -9,19 +9,19 @@ import forta_toolkit.parsing.address
 
 def parse_log_data(log: dict) -> dict:
     """Flatten and format all the data in an event log."""
-    # init
+    # common
     __data = {
-        'block': getattr(log, 'block_number', getattr(log, 'blockNumber', 0)),
-        'hash': getattr(log, 'transaction_hash', getattr(log, 'transactionHash', '0x')),
-        'index': getattr(log, 'log_index', getattr(log, 'logIndex', 0)),
-        'address': forta_toolkit.parsing.address.format_with_checksum(getattr(log, 'address', '')),
-        'topics': [forta_toolkit._utils.to_bytes(__t) for __t in getattr(log, 'topics', [])],
-        'data': getattr(log, 'data', '0x'),}
+        'block': forta_toolkit.parsing.common.get_field(dataset=log, keys=('block_number', 'blockNumber'), default=0),
+        'hash': forta_toolkit.parsing.common.get_field(dataset=log, keys=('transaction_hash', 'transactionHash'), default='0x', callback=forta_toolkit.parsing.common.to_hexstr),
+        'index': forta_toolkit.parsing.common.get_field(dataset=log, keys=('log_index', 'logIndex'), default=0),
+        'address': forta_toolkit.parsing.common.get_field(dataset=log, keys=('address',), default='', callback=forta_toolkit.parsing.address.format_with_checksum),
+        'topics': [forta_toolkit.common.to_bytes(__t) for __t in forta_toolkit.parsing.common.get_field(dataset=log, keys=('topics',), default=[])],
+        'data': forta_toolkit.parsing.common.get_field(dataset=log, keys=('data',), default='0x', callback=forta_toolkit.parsing.common.to_hexstr),}
     # aliases
-    __data['blockHash'] = getattr(log, 'block_hash', getattr(log, 'blockHash', '0x'))
+    __data['blockHash'] = forta_toolkit.parsing.common.get_field(dataset=log, keys=('block_hash', 'blockHash'), default='0x', callback=forta_toolkit.parsing.common.to_hexstr)
     __data['blockNumber'] = __data['block']
     __data['transactionHash'] = __data['hash']
-    __data['transactionIndex'] = getattr(log, 'transaction_index', getattr(log, 'transactionIndex', 0))
+    __data['transactionIndex'] = forta_toolkit.parsing.common.get_field(dataset=log, keys=('transaction_index', 'transactionIndex'), default=0)
     __data['logIndex'] = __data['index']
     # output
     return __data

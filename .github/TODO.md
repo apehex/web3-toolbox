@@ -1,6 +1,11 @@
+## Generic
+
+[ ] specify typings
+
 ## Parsing
 
 [ ] parse ALL trace types into the SAME output
+[ ] all parsing function return the identity on themselves
 
 ## Performances
 

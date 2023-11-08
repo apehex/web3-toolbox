@@ -7,12 +7,12 @@ readme = ".github/README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.9, <4"
-forta_agent = ">=0.1.23"
 web3 = ">=5"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=7"
 pyarrow = ">=13"
+setuptools = ">=68"
 
 [build-system]
 requires = ["poetry-core"]
