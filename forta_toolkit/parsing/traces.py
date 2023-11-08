@@ -8,15 +8,15 @@ import forta_toolkit.parsing.common
 def parse_trace_data(trace: dict) -> dict:
     """Flatten and format all the data in a transaction trace."""
     # common
-    __action = forta_toolkit.parsing.common.get_field(dataset=trace, keys=('action',), default={})
-    __result = forta_toolkit.parsing.common.get_field(dataset=trace, keys=('result',), default={})
+    __action = forta_toolkit.parsing.common.get_field(dataset=trace, keys=('action',), default=trace)
+    __result = forta_toolkit.parsing.common.get_field(dataset=trace, keys=('result',), default=trace)
     # common
     __data = {
-        'block': forta_toolkit.parsing.common.get_field(dataset=trace, keys=('block_number', 'blockNumber'), default=0),
-        'hash': forta_toolkit.parsing.common.get_field(dataset=trace, keys=('transaction_hash', 'transactionHash'), default='0x', callback=forta_toolkit.parsing.common.to_hexstr),
+        'block': forta_toolkit.parsing.common.get_field(dataset=trace, keys=('block_number', 'blockNumber', 'block'), default=0),
+        'hash': forta_toolkit.parsing.common.get_field(dataset=trace, keys=('transaction_hash', 'transactionHash', 'hash'), default='0x', callback=forta_toolkit.parsing.common.to_hexstr),
         'type': forta_toolkit.parsing.common.get_field(dataset=trace, keys=('type',), default=''),
         'value': forta_toolkit.parsing.common.get_field(dataset=trace, keys=('value',), default=0),
-        'gas': forta_toolkit.parsing.common.get_field(dataset=trace, keys=('gas_used', 'gasUsed'), default=0),
+        'gas': forta_toolkit.parsing.common.get_field(dataset=trace, keys=('gas_used', 'gasUsed', 'gas'), default=0),
         'from': '',
         'to': '',
         'input': '',
@@ -31,14 +31,14 @@ def parse_trace_data(trace: dict) -> dict:
     # create
     if __data['type'] == 'create':
         __data['from'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('from', 'from_'), default='', callback=forta_toolkit.parsing.address.format_with_checksum)
-        __data['to'] = forta_toolkit.parsing.common.get_field(dataset=__result, keys=('address',), default='', callback=forta_toolkit.parsing.address.format_with_checksum)
-        __data['input'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('init',), default='0x', callback=forta_toolkit.parsing.common.to_hexstr)
-        __data['output'] = forta_toolkit.parsing.common.get_field(dataset=__result, keys=('code',), default='0x', callback=forta_toolkit.parsing.common.to_hexstr)
+        __data['to'] = forta_toolkit.parsing.common.get_field(dataset=__result, keys=('address', 'to'), default='', callback=forta_toolkit.parsing.address.format_with_checksum)
+        __data['input'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('init', 'input'), default='0x', callback=forta_toolkit.parsing.common.to_hexstr)
+        __data['output'] = forta_toolkit.parsing.common.get_field(dataset=__result, keys=('code', 'output'), default='0x', callback=forta_toolkit.parsing.common.to_hexstr)
     # suicide
     if __data['type'] == 'suicide':
-        __data['from'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('address',), default='', callback=forta_toolkit.parsing.address.format_with_checksum)
-        __data['to'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('refund_address', 'refundAddress'), default='', callback=forta_toolkit.parsing.address.format_with_checksum)
-        __data['input'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('balance',), default='0x', callback=forta_toolkit.parsing.common.to_hexstr)
+        __data['from'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('address', 'from'), default='', callback=forta_toolkit.parsing.address.format_with_checksum)
+        __data['to'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('refund_address', 'refundAddress', 'to'), default='', callback=forta_toolkit.parsing.address.format_with_checksum)
+        __data['input'] = forta_toolkit.parsing.common.get_field(dataset=__action, keys=('balance', 'input'), default='0x', callback=forta_toolkit.parsing.common.to_hexstr)
         __data['output'] = '0x'
     # output
     return __data

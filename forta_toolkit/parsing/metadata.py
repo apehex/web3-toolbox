@@ -4,8 +4,6 @@ import json
 import logging
 import os
 
-import web3
-
 # BOT VERSION #################################################################
 
 def get_bot_version() -> str:
@@ -22,7 +20,7 @@ def get_bot_version() -> str:
 
 # CHAIN ID ####################################################################
 
-def load_chain_id(provider: web3.Web3) -> int:
+def load_chain_id(provider: 'Web3') -> int:
     """Load the chain id into the execution environment."""
     __chain_id = 1
     try:

@@ -11,11 +11,11 @@ def parse_log_data(log: dict) -> dict:
     """Flatten and format all the data in an event log."""
     # common
     __data = {
-        'block': forta_toolkit.parsing.common.get_field(dataset=log, keys=('block_number', 'blockNumber'), default=0),
-        'hash': forta_toolkit.parsing.common.get_field(dataset=log, keys=('transaction_hash', 'transactionHash'), default='0x', callback=forta_toolkit.parsing.common.to_hexstr),
-        'index': forta_toolkit.parsing.common.get_field(dataset=log, keys=('log_index', 'logIndex'), default=0),
+        'block': forta_toolkit.parsing.common.get_field(dataset=log, keys=('block_number', 'blockNumber', 'block'), default=0),
+        'hash': forta_toolkit.parsing.common.get_field(dataset=log, keys=('transaction_hash', 'transactionHash', 'hash'), default='0x', callback=forta_toolkit.parsing.common.to_hexstr),
+        'index': forta_toolkit.parsing.common.get_field(dataset=log, keys=('log_index', 'logIndex', 'index'), default=0),
         'address': forta_toolkit.parsing.common.get_field(dataset=log, keys=('address',), default='', callback=forta_toolkit.parsing.address.format_with_checksum),
-        'topics': [forta_toolkit.common.to_bytes(__t) for __t in forta_toolkit.parsing.common.get_field(dataset=log, keys=('topics',), default=[])],
+        'topics': forta_toolkit.parsing.common.get_field(dataset=log, keys=('topics',), default=[], callback=lambda __l: [forta_toolkit.common.to_bytes(__t) for __t in __l]),
         'data': forta_toolkit.parsing.common.get_field(dataset=log, keys=('data',), default='0x', callback=forta_toolkit.parsing.common.to_hexstr),}
     # aliases
     __data['blockHash'] = forta_toolkit.parsing.common.get_field(dataset=log, keys=('block_hash', 'blockHash'), default='0x', callback=forta_toolkit.parsing.common.to_hexstr)
