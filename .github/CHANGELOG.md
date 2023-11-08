@@ -1,12 +1,13 @@
 # Changelog
 
-## v0.1.19 - v0.1.20
+## v0.1.19 - v0.1.21
 
 ### Changes
 
-- remove the `forta_agent` dependency
+- remove the `forta_agent` and `web3` dependencies
 - `parse_transaction_data`, `parse_log_data` and `parse_trace_data` all use `get_field`
 - the parsing functions handle Forta objects, RPC results and simpler dictionaries to represent tx, logs, etc with `get_field`
+- fix various edge cases
 
 ### Additions
 
