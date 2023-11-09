@@ -1,4 +1,4 @@
-"""Load the bot metadata."""
+"""Setup the bot env."""
 
 import json
 import logging

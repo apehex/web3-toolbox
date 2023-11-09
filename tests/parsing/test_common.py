@@ -79,5 +79,5 @@ def test_access_functions_work_both_on_standard_and_attribute_dict(attribute_dic
 
 def test_access_functions_always_call_the_callback(attribute_dict):
     assert fpc.get_field(dataset=attribute_dict, keys=('first',), default='out', callback=print) == None
-    assert fpc.get_field(dataset=attribute_dict, keys='second', default='out', callback=str) == '2'
+    assert fpc.get_field(dataset=attribute_dict, keys=('b', 'second',), default='out', callback=str) == '2'
     assert fpc.get_field(dataset=attribute_dict, keys=('heyhey', 'blehbleh', -1), default='out', callback=len) == len('out')

@@ -2,6 +2,7 @@
 
 [x] remove web3 from production, keep as dev dependency
 [ ] specify typings
+[ ] document the functionalities
 
 ## Parsing
 
