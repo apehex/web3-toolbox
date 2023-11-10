@@ -15,7 +15,7 @@ def is_iterable(data: typing.Any) -> bool:
         return False
     return True
 
-def is_raw_hex(data: typing.Any) -> bool:
+def is_hexstr(data: typing.Any) -> bool:
     """Check whether the data is a raw hexadecimal string."""
     try:
         int(data, 16)
@@ -37,7 +37,7 @@ def to_hexstr(data: typing.Any) -> str:
     if isinstance(data, int):
         __data = hex(data)
     if isinstance(data, str):
-        __data = data if is_raw_hex(data=data) else data.replace('0x', '').encode('utf-8').hex()
+        __data = data if is_hexstr(data=data) else data.replace('0x', '').encode('utf-8').hex()
     if isinstance(data, bytes):
         __data = data.hex()
     return normalize_hexstr(__data)
