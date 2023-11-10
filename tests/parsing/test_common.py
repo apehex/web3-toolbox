@@ -38,9 +38,9 @@ def test_is_iterable_on_random_data(non_iterable_data, iterable_data):
     assert not any(__nope)
     assert all(__yeah)
 
-def test_is_raw_hex_on_random_data(non_hexstr_data, hexstr_data):
-    __nope = [fpc.is_raw_hex(__d) for __d in non_hexstr_data]
-    __yeah = [fpc.is_raw_hex(__d) for __d in hexstr_data]
+def test_is_hexstr_on_random_data(non_hexstr_data, hexstr_data):
+    __nope = [fpc.is_hexstr(__d) for __d in non_hexstr_data]
+    __yeah = [fpc.is_hexstr(__d) for __d in hexstr_data]
     assert not any(__nope)
     assert all(__yeah)
 
