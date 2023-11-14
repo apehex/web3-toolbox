@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.1.19 - v0.1.21
+## v0.1.19 - v0.1.22
 
 ### Changes
 
@@ -13,6 +13,7 @@
 
 - definitive functions for data sanitizing & formatting into common, consistent types
 - tests for all the modules
+- documentation for the features
 
 ## v0.1.18
 

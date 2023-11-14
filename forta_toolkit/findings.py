@@ -2,13 +2,13 @@
 
 # METADATA ####################################################################
 
-def default_get_alert_metadata(chain_id: int, tx_hash: str, sender: str, recipient: str, confidence: float, **kwargs) -> dict:
+def default_get_alert_metadata(chain_id: int, transaction: dict, log: dict, trace: dict, confidence: float, **kwargs) -> dict:
     """Generate the alert metadata."""
     return {
         'chain_id': str(chain_id),
-        'tx_hash': tx_hash,
-        'from': sender,
-        'to': recipient,
+        'tx_hash': transaction.get('hash', ''),
+        'from': transaction.get('from', '0x'),
+        'to': transaction.get('to', '0x'),
         'confidence': str(round(confidence, 1)),}
 
 # FACTORY #####################################################################
