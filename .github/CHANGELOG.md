@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.23
+
+### Fixes
+
+- respect the order in which field aliases are queried when using `get` with a list of keys (left to right)
+
 ## v0.1.19 - v0.1.22
 
 ### Changes

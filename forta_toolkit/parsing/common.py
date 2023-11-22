@@ -68,8 +68,8 @@ def get_field(dataset: typing.Any, keys: collections.abc.Iterable, default: typi
         elif len(keys) > 1:
             return get_field(
                 dataset=dataset,
-                keys=keys[1:],
-                default=get_field_alias(dataset=dataset, key=keys[0], default=default),
+                keys=keys[:-1],
+                default=get_field_alias(dataset=dataset, key=keys[-1], default=default),
                 callback=callback)
     return callback(default)
 
