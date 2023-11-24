@@ -25,3 +25,4 @@ def test_address_format(incomplete_addresses):
 
 def test_address_checksum():
     assert fpa.format_with_checksum('0x00FC00900000002C00BE4EF8F49c000211000c43') != '0x00FC00900000002C00BE4EF8F49c000211000c43'.lower()
+    assert fpa.format_with_checksum('0x00FC00900000002C00BE4EF8F49c000211000c43') != '0x00FC00900000002C00BE4EF8F49c000211000c43'.upper()

@@ -16,7 +16,7 @@ def provider():
 @pytest.fixture
 @fp.profile
 def some_process(provider):
-    [provider.eth.get_transaction(__t['hash']) for __t in td.ALL_TRANSACTIONS[:16]]
+    [provider.eth.get_transaction(__t['hash']) for __t in td.ALL_TRANSACTIONS[:4]]
 
 # PROFILING ###################################################################
 
