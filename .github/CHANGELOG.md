@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.2.1
+
+### Fixes
+
+- `parse_transaction_data`, `parse_log_data` and `parse_trace_data` now leave the data unchanged if it was already parsed
+
+### Additions
+
+- add the decorator `forta_toolkit.indexing.dump.serialize` to automatically pickle the IO of `handle_transaction`
+
 ## v0.1.23
 
 ### Fixes

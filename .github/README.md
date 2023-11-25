@@ -8,6 +8,8 @@ Various tools to help with the common problems of Forta bot development.
 - [Usage](#usage)
   - [Alert statistics](#alert-statistics)
   - [Logging execution events](#logging-execution-events)
+  - [Indexing](#indexing)
+  - [Preprocessing](#preprocessing)
   - [Improving performances](#improving-performances)
   - [Load balancing](#load-balancing)
   - [Profiling](#profiling)
@@ -151,6 +153,28 @@ Which will produce [messages with the bot version and log level][forta-example-a
 ```
 [0.1.17 - INFO] Metamorphism: 0x212728A4567F63e41eCD57A7dc329dbF2081B370 is deploying a factory contract at 0xF20e35e946C95ea4fcdadbEd1d79f28f2B8F44DE
 ```
+
+### Indexing
+
+The input arguments and the output findings can be automatically saved to the disk with:
+
+```python
+import forta_toolkit.indexing.dump
+
+@forta_toolkit.indexing.dump.serialize()
+def handle_transaction(log: TransactionEvent) -> list:
+    pass
+```
+
+The decorator accepts a few optional arguments:
+
+```python
+@forta_toolkit.indexing.dump.serialize(arguments=False, results=True, filter=True, compress=False, path='.data/{alert}/{txhash}/')
+def handle_transaction(log: TransactionEvent) -> list:
+    pass
+```
+
+### Preprocessing
 
 ### Improving performances
 
