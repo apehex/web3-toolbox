@@ -172,7 +172,7 @@ The input arguments and the output findings can be automatically saved to the di
 ```python
 import forta_toolkit.indexing.dump
 
-@forta_toolkit.indexing.dump.serialize()
+@forta_toolkit.indexing.serialize_io()
 def handle_transaction(log: TransactionEvent) -> list:
     pass
 ```
@@ -180,7 +180,7 @@ def handle_transaction(log: TransactionEvent) -> list:
 The decorator accepts a few optional arguments:
 
 ```python
-@forta_toolkit.indexing.dump.serialize(arguments=False, results=True, filter=True, compress=False, path='.data/{alert}/{txhash}/')
+@forta_toolkit.indexing.serialize_io(arguments=False, results=True, filter=True, compress=False, path='.data/{alert}/{txhash}/')
 def handle_transaction(log: TransactionEvent) -> list:
     pass
 ```
@@ -243,20 +243,20 @@ However the order in which the decorator are composed matters:
 @forta_toolkit.profiling.timeit
 @forta_toolkit.alerts.alert_history(size=history_size)
 @forta_toolkit.preprocessing.parse_forta_arguments
-@forta_toolkit.indexing.dump.serialize(arguments=True, results=True)
+@forta_toolkit.indexing.serialize_io(arguments=True, results=True)
 def handle_transaction(transaction: dict, logs: list, traces: list) -> list:
     pass
 ```
 
-In the configuration above, the `serialize` decorator will save each of the `transaction`, `logs` and `traces` objects.
+In the configuration above, the `serialize_io` decorator will save each of the `transaction`, `logs` and `traces` objects.
 However if the decorators were switched:
 
 ```python
-@forta_toolkit.indexing.dump.serialize(arguments=True, results=True)`
+@forta_toolkit.indexing.serialize_io(arguments=True, results=True)`
 @forta_toolkit.preprocessing.parse_forta_arguments
 ```
 
-`serialize` would save to disk the arguments of the function returned by `parse_forta_arguments`: a single `TransactionEvent` would be serialized to the disk.
+`serialize_io` would save to disk the arguments of the function returned by `parse_forta_arguments`: a single `TransactionEvent` would be serialized to the disk.
 
 Be wary of this composition and test your setup!
 

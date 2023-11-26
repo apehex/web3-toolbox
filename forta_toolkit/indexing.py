@@ -31,7 +31,7 @@ def _serialize_inputs(path: str, args: tuple, kwargs: dict) -> None:
     for __k, __v in kwargs.items():
         _dump(data=__v, path=os.path.join(path, '{name}.pkl'.format(name=__k)))
 
-def serialize(arguments: bool=True, results: bool=True, filter: bool=True, compress: bool=False, path: str=PATH) -> callable:
+def serialize_io(arguments: bool=True, results: bool=True, filter: bool=True, compress: bool=False, path: str=PATH) -> callable:
     """Creates a decorator for handle_transaction to dump its data as serialized python objects."""
 
     def __decorator(func: callable) -> callable:

@@ -1,5 +1,27 @@
 # Changelog
 
+## v0.4.1
+
+### Changes
+
+- now requires the `pyarrow` dependency
+
+### Additions
+
+- add `import_from_database` and `export_to_database` to manage the blockchain history; the schema is the same as [`cryo`][github-cryo] and it saves:
+  - transactions
+  - logs
+  - traces
+  - contracts
+  - findings
+
+## v0.3.2
+
+### Changes
+
+- move the module `forta_toolkit.indexing.dump` to `forta_toolkit.indexing`
+- rename the function `serialize` in `forta_toolkit.indexing` to `serialize_io`
+
 ## v0.3.1
 
 ### Additions
@@ -70,3 +92,5 @@
 ### Additions
 
 - reformat and flatten transaction traces
+
+[github-cryo]: https://github.com/paradigmxyz/cryo
