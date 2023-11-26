@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.3.1
+
+### Additions
+
+- add the decorator `parse_forta_arguments` to split, parse the `TransactionEvent` into `transaction`, `logs` and `traces`
+- also sanitize the input data and guarantee a fixed structure
+
 ## v0.2.1
 
 ### Fixes

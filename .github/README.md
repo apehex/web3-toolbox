@@ -13,6 +13,7 @@ Various tools to help with the common problems of Forta bot development.
   - [Improving performances](#improving-performances)
   - [Load balancing](#load-balancing)
   - [Profiling](#profiling)
+  - [Recommendation And Warning](#recommendation-and-warning)
 - [Development](#development)
   - [Changelog](#changelog)
   - [Todo](#todo)
@@ -34,6 +35,16 @@ poetry add forta_toolkit
 ### Bot setup
 
 The Forta often require initialization steps to adapt to a given chain or use external tools.
+
+The toolkit reads the OS environment and local files to load the settings:
+
+```python
+import forta_toolkit.parsing.env
+
+forta_toolkit.parsing.env.get_bot_version() # reads "package.json" in the parent directory
+forta_toolkit.parsing.env.load_secrets() # read the file "secrets.json", in the parent directory
+forta_toolkit.parsing.env.load_chain_id(provider=w3) # load the chain_id from the env variables or query the provider if it is not set
+```
 
 ### Alert statistics
 
@@ -176,6 +187,20 @@ def handle_transaction(log: TransactionEvent) -> list:
 
 ### Preprocessing
 
+The decorator `parse_forta_arguments` processes the input `TransactionEvent` and returns the `transaction`, `logs` and `traces` objects.
+
+These objects are automatically sanitized and parsed into fixed structures and base types (mostly `int`, HEX `str`, `list` and `bytes`).
+
+```python
+import forta_toolkit.preprocessing
+
+@forta_toolkit.preprocessing.parse_forta_arguments
+def handle_transaction(transaction: dict, logs: list, traces: list) -> list:
+    pass
+```
+
+This decorator can only be placed right above a function with the signature `(transaction: dict, logs: list, traces: list) -> list`.
+
 ### Improving performances
 
 ### Load balancing
@@ -207,6 +232,35 @@ Then you can parse the profile logs manually with `pstats` or:
 ```python
 display_performances(logpath='some/path/to/the/logs/handle_transaction')
 ```
+
+### Recommendation And Warning
+
+All the above decorators can be mixed and matched.
+
+However the order in which the decorator are composed matters:
+
+```python
+@forta_toolkit.profiling.timeit
+@forta_toolkit.alerts.alert_history(size=history_size)
+@forta_toolkit.preprocessing.parse_forta_arguments
+@forta_toolkit.indexing.dump.serialize(arguments=True, results=True)
+def handle_transaction(transaction: dict, logs: list, traces: list) -> list:
+    pass
+```
+
+In the configuration above, the `serialize` decorator will save each of the `transaction`, `logs` and `traces` objects.
+However if the decorators were switched:
+
+```python
+@forta_toolkit.indexing.dump.serialize(arguments=True, results=True)`
+@forta_toolkit.preprocessing.parse_forta_arguments
+```
+
+`serialize` would save to disk the arguments of the function returned by `parse_forta_arguments`: a single `TransactionEvent` would be serialized to the disk.
+
+Be wary of this composition and test your setup!
+
+> The recommended order is the one written at the start of this section.
 
 ## Development
 
