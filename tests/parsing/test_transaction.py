@@ -44,9 +44,9 @@ def test_transaction_data_fields_have_consistent_values_after_parsing(__data):
     assert all([fpc.is_hexstr(__d.get('gas_price', '')) for __d in __data])
     assert all([fpc.is_hexstr(__d.get('from_address', '')) for __d in __data])
     # can be empty, but not always
-    assert all([not bool(__d.get('to_address', '')) or fpc.is_hexstr(__d.get('to_address', '')) for __d in __data])
-    assert all([not bool(__d.get('input', '')) or fpc.is_hexstr(__d.get('input', '')) for __d in __data])
-    assert all([not bool(__d.get('value', '')) or fpc.is_hexstr(__d.get('value', '')) for __d in __data])
+    assert all([fpc.is_hexstr(__d.get('to_address', '')) for __d in __data])
+    assert all([fpc.is_hexstr(__d.get('input', '')) for __d in __data])
+    assert all([fpc.is_hexstr(__d.get('value', '')) for __d in __data])
 
 # ITERATION ###################################################################
 
