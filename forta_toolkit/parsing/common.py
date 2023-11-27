@@ -19,7 +19,7 @@ def is_empty_hexstr(data: typing.Any) -> bool:
     """Check whether the data is an empty hexadecimal string."""
     return (
         isinstance(data, str)
-        and (data == '') or (data.lower() == '0x'))
+        and ((data == '') or (data.lower() == '0x')))
 
 def is_hexstr(data: typing.Any) -> bool:
     """Check whether the data is a raw hexadecimal string."""
@@ -65,8 +65,8 @@ def to_bytes(data: typing.Any) -> bytes:
 
 def to_int(data: typing.Any) -> int:
     """Format any data as an integer."""
-    __data = '0x00' if is_empty_hexstr(data=data) else to_hexstr(data=data)
-    return int(__data, 16)
+    __data = to_hexstr(data=data, prefix=False)
+    return int(__data if __data else '0', 16)
 
 # ACCESS ######################################################################
 
