@@ -6,9 +6,9 @@ def default_get_alert_metadata(chain_id: int, transaction: dict, log: dict, trac
     """Generate the alert metadata."""
     return {
         'chain_id': str(chain_id),
-        'tx_hash': transaction.get('hash', ''),
-        'from': transaction.get('from', '0x'),
-        'to': transaction.get('to', '0x'),
+        'tx_hash': transaction.get('transaction_hash', ''),
+        'from': transaction.get('from_address', '0x'),
+        'to': transaction.get('to_address', '0x'),
         'confidence': str(round(confidence, 1)),}
 
 # FACTORY #####################################################################
