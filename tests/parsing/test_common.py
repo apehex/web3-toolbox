@@ -20,11 +20,11 @@ def iterable_data():
 
 @pytest.fixture
 def non_hexstr_data():
-    return [1234, 'fgh', '0x', '0xdj']
+    return [1234, 'fgh', '0xdj']
 
 @pytest.fixture
 def hexstr_data():
-    return ['1234', '0x2', '0xdeadbeef', 'AAAAAA', 'aaaaaa']
+    return ['1234', '0x2', '0x', '', '0xdeadbeef', 'AAAAAA', 'aaaaaa']
 
 @pytest.fixture
 def attribute_dict():

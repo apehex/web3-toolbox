@@ -16,7 +16,7 @@ def incomplete_addresses():
 
 def test_null_address_stays_empty_after_formatting(empty_addresses):
     __formatted = [fpa.format_with_checksum(__a) for __a in empty_addresses]
-    assert all(__a == '' for __a in __formatted)
+    assert all([__a == '' for __a in __formatted])
 
 def test_address_format(incomplete_addresses):
     __addresses = [fpa.format_with_checksum(__a) for __a in incomplete_addresses]

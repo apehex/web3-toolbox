@@ -15,10 +15,16 @@ def is_iterable(data: typing.Any) -> bool:
         return False
     return True
 
+def is_empty_hexstr(data: typing.Any) -> bool:
+    """Check whether the data is an empty hexadecimal string."""
+    return (
+        isinstance(data, str)
+        and (data == '') or (data.lower() == '0x'))
+
 def is_hexstr(data: typing.Any) -> bool:
     """Check whether the data is a raw hexadecimal string."""
     try:
-        int(data, 16)
+        int(data, 16) if not is_empty_hexstr(data=data) else 0
         return True
     except Exception:
         return False
