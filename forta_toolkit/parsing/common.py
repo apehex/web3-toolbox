@@ -23,24 +23,35 @@ def is_hexstr(data: typing.Any) -> bool:
     except Exception:
         return False
 
+# HEX STRINGS #################################################################
+
+def del_hex_prefix(data: str) -> str:
+    """Safely remove the HEX Ox prefix (no error when absent)."""
+    return data.replace('0x', '').replace('0X', '')
+
+def add_hex_prefix(data: str) -> str:
+    """Safely prepend the HEX Ox prefix (no duplicates)."""
+    return '0x' + del_hex_prefix(data=data)
+
+def normalize_hexstr(data: str, prefix=False) -> str:
+    """Format the hex data in a known and consistent way."""
+    __prefix = '0x' if prefix else ''
+    __padding = (len(data) % 2) * '0' # pad so that the length is pair => full bytes
+    __data = del_hex_prefix(data.lower())
+    return __prefix + __padding + __data
+
 # CONVERSIONS #################################################################
 
-def normalize_hexstr(data: str) -> str:
-    """Format the hex data in a known and consistent way."""
-    return (
-        ((len(data) % 2) * '0') # pad so that the length is pair => full bytes
-        + data.lower().replace('0x', ''))
-
-def to_hexstr(data: typing.Any) -> str:
+def to_hexstr(data: typing.Any, prefix=False) -> str:
     """Format any data as a HEX string."""
     __data = ''
     if isinstance(data, int):
         __data = hex(data)
     if isinstance(data, str):
-        __data = data if is_hexstr(data=data) else data.replace('0x', '').encode('utf-8').hex()
+        __data = data if is_hexstr(data=data) else data.encode('utf-8').hex()
     if isinstance(data, bytes):
         __data = data.hex()
-    return normalize_hexstr(__data)
+    return normalize_hexstr(data=__data, prefix=prefix)
 
 def to_bytes(data: typing.Any) -> bytes:
     """Format any data as a bytes array."""
