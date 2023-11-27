@@ -61,12 +61,12 @@ def to_hexstr(data: typing.Any, prefix=False) -> str:
 
 def to_bytes(data: typing.Any) -> bytes:
     """Format any data as a bytes array."""
-    return bytes.fromhex(to_hexstr(data))
+    return bytes.fromhex('' if is_empty_hexstr(data=data) else to_hexstr(data=data))
 
 def to_int(data: typing.Any) -> int:
     """Format any data as an integer."""
-    __data = to_hexstr(data)
-    return int(__data if __data else '0', 16)
+    __data = '0x00' if is_empty_hexstr(data=data) else to_hexstr(data=data)
+    return int(__data, 16)
 
 # ACCESS ######################################################################
 
