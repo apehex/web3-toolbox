@@ -42,18 +42,3 @@ def parse_forta_arguments(func: callable) -> callable:
         return func(transaction=__tx, logs=__logs, traces=__traces)
 
     return __wrapper
-
-# BLOCKCHAIN HISTORY ##########################################################
-
-def connect_to_database(func: callable) -> callable:
-    """Creates a decorator for handle_transaction to add a connection to the database as argument."""
-
-    @functools.wraps(func)
-    def __wrapper(*args, **kwargs):
-        """Main function called on the logs gathered by the Forta network."""
-        # connect to the database
-        __database = None
-        # call handle_transaction
-        return func(database=__database, *args, **kwargs)
-
-    return __wrapper
