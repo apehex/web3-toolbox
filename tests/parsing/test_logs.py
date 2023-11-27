@@ -12,15 +12,15 @@ def __data():
     return [fpl.parse_log_data(__l) for __logs in td.ALL_LOGS for __l in __logs]
 
 @pytest.fixture
-def transaction_keys() -> set:
+def log_keys() -> set:
     return {'chain_id', 'block_number', 'transaction_hash', 'transaction_index', 'address', 'log_index', 'topics', 'data'}
 
 # PARSING #####################################################################
 
-def test_log_data_has_a_fixed_structure_after_parsing(__data, transaction_keys):
+def test_log_data_has_a_fixed_structure_after_parsing(__data, log_keys):
     assert all([type(__d) == dict for __d in __data])
     assert all([type(__v) == str or type(__v) == list for __d in __data for __v in __d.values()])
-    assert all([set(__d.keys()).issuperset(transaction_keys) for __d in __data]) # contains key alias too, like "logIndex"
+    assert all([set(__d.keys()).issuperset(log_keys) for __d in __data]) # contains key alias too, like "logIndex"
 
 # CONTENT #####################################################################
 

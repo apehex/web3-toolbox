@@ -89,9 +89,9 @@ Transactions are represented like the following:
 
 ```python
 {
+    'hash': '8f6c8d55a3d2da59e8c1d692e5ae0ab73e5eedded638a9d2877f10af8cedbb5e',
     'data': 'a9059cbb000000000000000000000000a95085101c57b0fefdecff295894041feb4071c50000000000000000000000000000000000000000000000000000000ee4165af2',
     'from': '0x6e7d071329267Ef7CD9D6d647C2E01a275dFb85c',
-    'hash': '8f6c8d55a3d2da59e8c1d692e5ae0ab73e5eedded638a9d2877f10af8cedbb5e',
     'to': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
     'value': '00'}
 ```
@@ -156,7 +156,10 @@ The keys remain `("from", "to", "input", "output")` when the trace type is `suic
 The logging level and message template can be setup with:
 
 ```python
-forta_toolkit.logging.setup_logger(logging.INFO)
+import forta_toolkit.logging
+import forta_toolkit.parsing.env
+
+forta_toolkit.logging.setup_logger(level=logging.INFO, version=forta_toolkit.parsing.env.get_bot_version())
 ```
 
 Which will produce [messages with the bot version and log level][forta-example-alerts]:
@@ -172,7 +175,7 @@ The input arguments and the output findings can be automatically saved to the di
 ```python
 import forta_toolkit.indexing.dump
 
-@forta_toolkit.indexing.serialize_io()
+@forta_toolkit.indexing.pickle.serialize_io()
 def handle_transaction(log: TransactionEvent) -> list:
     pass
 ```
@@ -180,7 +183,7 @@ def handle_transaction(log: TransactionEvent) -> list:
 The decorator accepts a few optional arguments:
 
 ```python
-@forta_toolkit.indexing.serialize_io(arguments=False, results=True, filter=True, compress=False, path='.data/{alert}/{txhash}/')
+@forta_toolkit.indexing.pickle.serialize_io(arguments=False, results=True, filter=True, compress=False, path='.data/{alert}/{txhash}/')
 def handle_transaction(log: TransactionEvent) -> list:
     pass
 ```
@@ -243,7 +246,7 @@ However the order in which the decorator are composed matters:
 @forta_toolkit.profiling.timeit
 @forta_toolkit.alerts.alert_history(size=history_size)
 @forta_toolkit.preprocessing.parse_forta_arguments
-@forta_toolkit.indexing.serialize_io(arguments=True, results=True)
+@forta_toolkit.indexing.pickle.serialize_io(arguments=True, results=True)
 def handle_transaction(transaction: dict, logs: list, traces: list) -> list:
     pass
 ```
@@ -252,7 +255,7 @@ In the configuration above, the `serialize_io` decorator will save each of the `
 However if the decorators were switched:
 
 ```python
-@forta_toolkit.indexing.serialize_io(arguments=True, results=True)`
+@forta_toolkit.indexing.pickle.serialize_io(arguments=True, results=True)`
 @forta_toolkit.preprocessing.parse_forta_arguments
 ```
 

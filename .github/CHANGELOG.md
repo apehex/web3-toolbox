@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.4.1
+## v0.4.2
 
 ### Changes
 
@@ -14,6 +14,17 @@
   - traces
   - contracts
   - findings
+
+## v0.4.1
+
+### Changes
+
+- split the `indexing` module by format: `forta_toolkit.indexing.pickle` and `forta_toolkit.indexing.parquet`
+- changed the keys of the `transaction`, `logs` and `traces` to accomodate all the data from the nodes
+- toggle the "0x" prefix on HEX strings (default: no prefix)
+- the prefix is systematically prepended to the parsed data
+- bot version must be passed to `setup_logger` explicitely
+- consider "0x" and "" as valid empty HEX strings
 
 ## v0.3.2
 
