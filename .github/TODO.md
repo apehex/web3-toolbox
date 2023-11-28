@@ -16,8 +16,9 @@
 ## Indexing
 
 [ ] transparent indexing:
-    [ ] use Parquet files / DB
-[ ] scrape Zettablock?
+    [x] use Parquet files / DB
+    [x] compatible with cryo
+    [ ] Zettablock?
 [ ] use cryo to cache all the data?
 [ ] collect evidence:
     [ ] => address, bytecode, deployer, tx, labels, etc upon detection
@@ -25,18 +26,21 @@
 ## Testing
 
 [ ] test on cryo data
-[ ] pickle dataset:
-    [ ] metamorphic tx
-    [ ] meta traces
-    [ ] random traces & transactions
+[x] pickle dataset:
+    [x] metamorphic tx
+    [x] meta traces
+    [x] random traces & transactions
 [ ] modules:
     [x] alerts
-    [ ] findings
+    [x] findings
     [ ] indexing
+        [ ] pickle
+        [ ] parquet
+        [ ] zettablock
     [x] logging
-    [ ] parsing:
+    [x] parsing:
         [x] address
-        [ ] metadata
+        [x] metadata
         [x] traces
         [x] event logs
         [x] transactions

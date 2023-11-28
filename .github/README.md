@@ -198,6 +198,8 @@ Which will produce [messages with the bot version and log level][forta-example-a
 
 ### Indexing
 
+#### Serialization (Pickle)
+
 The input arguments and the output findings can be automatically saved to the disk with:
 
 ```python
@@ -215,6 +217,40 @@ The decorator accepts a few optional arguments:
 def handle_transaction(log: TransactionEvent) -> list:
     pass
 ```
+
+#### Database (Parquet)
+
+The blockchain data can be indexed in a database with:
+
+```python
+import forta_toolkit.indexing.parquet
+
+@forta_toolkit.indexing.parquet.export_to_database(chain_id=1, dataset='contracts', path='.data/contracts/', chunksize=2**10)
+def handle_transaction(log: TransactionEvent) -> list:
+    pass
+```
+
+Currently, only the `contracts` dataset is supported.
+The module will soon cover `transaction`, `logs` and `traces` data too.
+
+The database is saved using the `parquet` file format and using the library `pyarrow`.
+
+This historic data can then be imported with:
+
+```python
+@forta_toolkit.indexing.parquet.import_from_database(chain_id=CHAIN_ID, dataset='contracts', path='.data/contracts/')
+```
+
+Which would lead to the final declaration:
+
+```python
+@forta_toolkit.indexing.parquet.export_to_database(chain_id=1, dataset='contracts', path='.data/contracts/', chunksize=2**10)
+@forta_toolkit.indexing.parquet.import_from_database(chain_id=CHAIN_ID, dataset='contracts', path='.data/contracts/')
+def handle_transaction(log: TransactionEvent, dataset: 'pyarrow._dataset.FileSystemDataset') -> list:
+    pass
+```
+
+> Note that the dataset is automatically passed as argument to `handle_transaction`.
 
 ### Preprocessing
 

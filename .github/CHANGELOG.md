@@ -4,7 +4,7 @@
 
 ### Changes
 
-- now requires the `pyarrow` dependency
+- now requires the `pyarrow` and `eth-utils` dependencies
 
 ### Additions
 
