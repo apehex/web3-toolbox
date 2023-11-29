@@ -24,79 +24,79 @@ SCHEMAS = {
 # TRANSACTIONS
 
     'transactions': pyarrow.schema([
-        pyarrow.field('chain_id', pyarrow.uint64()),
-        pyarrow.field('block_number', pyarrow.uint64()),
-        pyarrow.field('transaction_hash', pyarrow.binary()),
-        pyarrow.field('transaction_type', pyarrow.uint32()),
-        pyarrow.field('transaction_index', pyarrow.uint64()),
-        pyarrow.field('nonce', pyarrow.uint64()),
-        pyarrow.field('gas_used', pyarrow.uint64()),
-        pyarrow.field('gas_limit', pyarrow.uint64()),
-        pyarrow.field('gas_price', pyarrow.uint64()),
-        pyarrow.field('max_fee_per_gas', pyarrow.uint64()),
-        pyarrow.field('max_priority_fee_per_gas', pyarrow.uint64()),
-        pyarrow.field('success', pyarrow.bool_()),
-        pyarrow.field('from_address', pyarrow.binary()),
-        pyarrow.field('to_address', pyarrow.binary()),
-        pyarrow.field('value_binary', pyarrow.binary()),
-        pyarrow.field('value_string', pyarrow.string()),
-        pyarrow.field('value_f64', pyarrow.float64()),
-        pyarrow.field('input', pyarrow.binary()),]),
+        pyarrow.lib.field('chain_id', pyarrow.uint64()),
+        pyarrow.lib.field('block_number', pyarrow.uint64()),
+        pyarrow.lib.field('transaction_hash', pyarrow.binary()),
+        pyarrow.lib.field('transaction_type', pyarrow.uint32()),
+        pyarrow.lib.field('transaction_index', pyarrow.uint64()),
+        pyarrow.lib.field('nonce', pyarrow.uint64()),
+        pyarrow.lib.field('gas_used', pyarrow.uint64()),
+        pyarrow.lib.field('gas_limit', pyarrow.uint64()),
+        pyarrow.lib.field('gas_price', pyarrow.uint64()),
+        pyarrow.lib.field('max_fee_per_gas', pyarrow.uint64()),
+        pyarrow.lib.field('max_priority_fee_per_gas', pyarrow.uint64()),
+        pyarrow.lib.field('success', pyarrow.bool_()),
+        pyarrow.lib.field('from_address', pyarrow.binary()),
+        pyarrow.lib.field('to_address', pyarrow.binary()),
+        pyarrow.lib.field('value_binary', pyarrow.binary()),
+        pyarrow.lib.field('value_string', pyarrow.string()),
+        pyarrow.lib.field('value_f64', pyarrow.float64()),
+        pyarrow.lib.field('input', pyarrow.binary()),]),
 
 # LOGS
 
     'logs': pyarrow.schema([
-        pyarrow.field('chain_id', pyarrow.uint64()),
-        pyarrow.field('block_number', pyarrow.uint32()),
-        pyarrow.field('transaction_hash', pyarrow.binary()),
-        pyarrow.field('transaction_index', pyarrow.uint32()),
-        pyarrow.field('address', pyarrow.binary()),
-        pyarrow.field('log_index', pyarrow.uint32()),
-        pyarrow.field('topic0', pyarrow.binary()),
-        pyarrow.field('topic2', pyarrow.binary()),
-        pyarrow.field('topic1', pyarrow.binary()),
-        pyarrow.field('topic3', pyarrow.binary()),
-        pyarrow.field('data', pyarrow.binary()),]),
+        pyarrow.lib.field('chain_id', pyarrow.uint64()),
+        pyarrow.lib.field('block_number', pyarrow.uint32()),
+        pyarrow.lib.field('transaction_hash', pyarrow.binary()),
+        pyarrow.lib.field('transaction_index', pyarrow.uint32()),
+        pyarrow.lib.field('address', pyarrow.binary()),
+        pyarrow.lib.field('log_index', pyarrow.uint32()),
+        pyarrow.lib.field('topic0', pyarrow.binary()),
+        pyarrow.lib.field('topic2', pyarrow.binary()),
+        pyarrow.lib.field('topic1', pyarrow.binary()),
+        pyarrow.lib.field('topic3', pyarrow.binary()),
+        pyarrow.lib.field('data', pyarrow.binary()),]),
 
 # TRACES
 
     'traces': pyarrow.schema([
-        pyarrow.field('chain_id', pyarrow.uint64()),
-        pyarrow.field('block_hash', pyarrow.binary()),
-        pyarrow.field('block_number', pyarrow.uint32()),
-        pyarrow.field('transaction_hash', pyarrow.binary()),
-        pyarrow.field('transaction_index', pyarrow.uint32()),
-        pyarrow.field('action_type', pyarrow.string()),
-        pyarrow.field('action_call_type', pyarrow.string()),
-        pyarrow.field('action_reward_type', pyarrow.string()),
-        pyarrow.field('action_gas', pyarrow.uint32()),
-        pyarrow.field('action_from', pyarrow.binary()),
-        pyarrow.field('action_to', pyarrow.binary()),
-        pyarrow.field('action_input', pyarrow.binary()),
-        pyarrow.field('action_init', pyarrow.binary()),
-        pyarrow.field('action_value', pyarrow.string()),
-        pyarrow.field('result_address', pyarrow.binary()),
-        pyarrow.field('result_gas_used', pyarrow.uint32()),
-        pyarrow.field('result_code', pyarrow.binary()),
-        pyarrow.field('result_output', pyarrow.binary()),
-        pyarrow.field('trace_address', pyarrow.string()),
-        pyarrow.field('subtraces', pyarrow.uint32()),
-        pyarrow.field('error', pyarrow.string()),]),
+        pyarrow.lib.field('chain_id', pyarrow.uint64()),
+        pyarrow.lib.field('block_hash', pyarrow.binary()),
+        pyarrow.lib.field('block_number', pyarrow.uint32()),
+        pyarrow.lib.field('transaction_hash', pyarrow.binary()),
+        pyarrow.lib.field('transaction_index', pyarrow.uint32()),
+        pyarrow.lib.field('action_type', pyarrow.string()),
+        pyarrow.lib.field('action_call_type', pyarrow.string()),
+        pyarrow.lib.field('action_reward_type', pyarrow.string()),
+        pyarrow.lib.field('action_gas', pyarrow.uint32()),
+        pyarrow.lib.field('action_from', pyarrow.binary()),
+        pyarrow.lib.field('action_to', pyarrow.binary()),
+        pyarrow.lib.field('action_input', pyarrow.binary()),
+        pyarrow.lib.field('action_init', pyarrow.binary()),
+        pyarrow.lib.field('action_value', pyarrow.string()),
+        pyarrow.lib.field('result_address', pyarrow.binary()),
+        pyarrow.lib.field('result_gas_used', pyarrow.uint32()),
+        pyarrow.lib.field('result_code', pyarrow.binary()),
+        pyarrow.lib.field('result_output', pyarrow.binary()),
+        pyarrow.lib.field('trace_address', pyarrow.string()),
+        pyarrow.lib.field('subtraces', pyarrow.uint32()),
+        pyarrow.lib.field('error', pyarrow.string()),]),
 
 # CONTRACTS
 
     'contracts': pyarrow.schema([
-        pyarrow.field('chain_id', pyarrow.uint64()),
-        pyarrow.field('block_number', pyarrow.uint32()),
-        pyarrow.field('transaction_hash', pyarrow.binary()),
-        pyarrow.field('deployer', pyarrow.binary()),
-        pyarrow.field('contract_address', pyarrow.binary()),
-        pyarrow.field('create_index', pyarrow.uint32()),
-        pyarrow.field('init_code', pyarrow.binary()),
-        pyarrow.field('init_code_hash', pyarrow.binary()),
-        pyarrow.field('code', pyarrow.binary()),
-        pyarrow.field('code_hash', pyarrow.binary()),
-        pyarrow.field('factory', pyarrow.binary()),]),
+        pyarrow.lib.field('chain_id', pyarrow.uint64()),
+        pyarrow.lib.field('block_number', pyarrow.uint32()),
+        pyarrow.lib.field('transaction_hash', pyarrow.binary()),
+        pyarrow.lib.field('deployer', pyarrow.binary()),
+        pyarrow.lib.field('contract_address', pyarrow.binary()),
+        pyarrow.lib.field('create_index', pyarrow.uint32()),
+        pyarrow.lib.field('init_code', pyarrow.binary()),
+        pyarrow.lib.field('init_code_hash', pyarrow.binary()),
+        pyarrow.lib.field('code', pyarrow.binary()),
+        pyarrow.lib.field('code_hash', pyarrow.binary()),
+        pyarrow.lib.field('factory', pyarrow.binary()),]),
 }
 
 # CASTING #####################################################################
@@ -140,9 +140,7 @@ def import_from_database(chain_id: int=1, dataset: str='contracts', path: str=PA
     __path = path.format(chain_id=chain_id, dataset=dataset)
     __schema = SCHEMAS.get(dataset, None)
     # create parent dir if it doesn't exist
-    os.makedirs(name=os.path.dirname(__path), exist_ok=True)
-    # connect to the database
-    __dataset = pyarrow.dataset.dataset(source=__path, schema=__schema, format='parquet', partitioning=['chain_id'])
+    os.makedirs(name=__path, exist_ok=True)
 
     def __decorator(func: callable) -> callable:
         """Actually wraps the handle_transaction and saves items in the database."""
@@ -184,7 +182,7 @@ def export_to_database(chain_id: int=1, dataset: str='contracts', path: str=PATH
     __rows = []
     __path = path.format(chain_id=chain_id, dataset=dataset)
     # create parent dir
-    os.makedirs(name=os.path.dirname(__path), exist_ok=True)
+    os.makedirs(name=__path, exist_ok=True)
     # append to the existing batch
     __chunk = len(os.listdir(__path))
 
