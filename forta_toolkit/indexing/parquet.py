@@ -101,29 +101,38 @@ SCHEMAS = {
 
 # CASTING #####################################################################
 
-def _list_contract_creations(traces: list, chain_id: int=1, schema: pyarrow.lib.Schema=SCHEMAS['contracts']) -> list:
+# TODO change format according to the destination dataset
+
+def cast_trace_to_contracts_dataset_row(trace: dict, chain_id: int=1, schema: pyarrow.lib.Schema=SCHEMAS['contracts'], compress: bool=False) -> dict:
+    """Format a transaction trace as a contract record."""
+    __row = {__k: None for __k in schema.names}
+    # hash the bytecode
+    __creation_bytecode = forta_toolkit.parsing.common.to_bytes(trace.get('action_init', None))
+    __creation_bytecode_hash = forta_toolkit.parsing.common.to_bytes(eth_utils.crypto.keccak(primitive=__creation_bytecode))
+    __runtime_bytecode = forta_toolkit.parsing.common.to_bytes(trace.get('result_code', None))
+    __runtime_bytecode_hash = forta_toolkit.parsing.common.to_bytes(eth_utils.crypto.keccak(primitive=__runtime_bytecode))
+    # fill the fields
+    __row['chain_id'] = chain_id
+    __row['block_number'] = forta_toolkit.parsing.common.to_int(trace.get('block_number', None))
+    __row['transaction_hash'] = forta_toolkit.parsing.common.to_bytes(trace.get('transaction_hash', None))
+    __row['deployer'] = forta_toolkit.parsing.common.to_bytes(trace.get('action_from', None))
+    __row['contract_address'] = forta_toolkit.parsing.common.to_bytes(trace.get('result_address', None))
+    __row['create_index'] = None
+    __row['init_code'] = b'' if compress else __creation_bytecode # only store the hash when compressing
+    __row['init_code_hash'] = __creation_bytecode_hash
+    __row['code'] = b'' if compress else __runtime_bytecode # only store the hash when compressing
+    __row['code_hash'] = __runtime_bytecode_hash
+    __row['factory'] = None
+    # return
+    return __row
+
+def list_contract_creations_in_traces(traces: list, chain_id: int=1, schema: pyarrow.lib.Schema=SCHEMAS['contracts'], compress: bool=False) -> list:
     """List all the contracts that were created during a transaction."""
     __rows = []
     for __t in traces:
         if 'create' in __t.get('action_type', ''):
-            __r = {__k: None for __k in schema.names}
-            # hash the bytecode
-            __creation_bytecode = forta_toolkit.parsing.common.to_bytes(__t.get('action_init', None))
-            __creation_bytecode_hash = forta_toolkit.parsing.common.to_bytes(eth_utils.crypto.keccak(primitive=__creation_bytecode))
-            __runtime_bytecode = forta_toolkit.parsing.common.to_bytes(__t.get('result_code', None))
-            __runtime_bytecode_hash = forta_toolkit.parsing.common.to_bytes(eth_utils.crypto.keccak(primitive=__runtime_bytecode))
-            # fill the fields
-            __r['chain_id'] = chain_id
-            __r['block_number'] = forta_toolkit.parsing.common.to_int(__t.get('block_number', None))
-            __r['transaction_hash'] = forta_toolkit.parsing.common.to_bytes(__t.get('transaction_hash', None))
-            __r['deployer'] = forta_toolkit.parsing.common.to_bytes(__t.get('action_from', None))
-            __r['contract_address'] = forta_toolkit.parsing.common.to_bytes(__t.get('result_address', None))
-            __r['create_index'] = None
-            __r['init_code'] = __creation_bytecode
-            __r['init_code_hash'] = __creation_bytecode_hash
-            __r['code'] = __runtime_bytecode
-            __r['code_hash'] = __runtime_bytecode_hash
-            __r['factory'] = None
+            # cast to match the contract schema
+            __r = cast_trace_to_contracts_dataset_row(trace=__t, chain_id=chain_id, schema=schema, compress=compress)
             # add to the list of contracts
             __rows.append(__r)
     return __rows
@@ -212,3 +221,11 @@ def export_to_database(chain_id: int=1, dataset: str='contracts', path: str=PATH
         return __wrapper
 
     return __decorator
+
+# QUERY #######################################################################
+
+def list_contracts_deployed_at(address: bytes, dataset: pyarrow.dataset.FileSystemDataset) -> list:
+    """List all the recorded deployments for a given address."""
+    __scanner = dataset.scanner(filter=pyarrow.dataset.field('contract_address') == address)
+    __table = __scanner.to_table()
+    return __table.to_pylist()
