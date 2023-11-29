@@ -15,7 +15,7 @@ import forta_toolkit.parsing.transaction
 
 # CONSTANTS ###################################################################
 
-PATH = '.data/parquet/{dataset}/'
+PATH = '.data/parquet/{dataset}/{chain_id}'
 
 # DATABASE SCHEMAS ############################################################
 
@@ -146,10 +146,11 @@ def _to_table(rows: list, schema: pyarrow.lib.Schema) -> pyarrow.Table:
 def import_from_database(chain_id: int=1, dataset: str='contracts', path: str=PATH) -> callable:
     """Creates a decorator for handle_transaction to add a connection to the database as argument."""
     # init
-    __path = path.format(chain_id=chain_id, dataset=dataset)
+    __partition_path = path.format(chain_id=chain_id, dataset=dataset)
+    __base_path = os.path.dirname(__partition_path)
     __schema = SCHEMAS.get(dataset, None)
-    # create parent dir if it doesn't exist
-    os.makedirs(name=__path, exist_ok=True)
+    # create dir recursively
+    os.makedirs(name=__partition_path, exist_ok=True)
 
     def __decorator(func: callable) -> callable:
         """Actually wraps the handle_transaction and saves items in the database."""
@@ -158,9 +159,9 @@ def import_from_database(chain_id: int=1, dataset: str='contracts', path: str=PA
         def __wrapper(*args, **kwargs):
             """Main function called on the logs gathered by the Forta network."""
             # access factory arguments
-            nonlocal __path, __schema
+            nonlocal __base_path, __schema
             # refresh the connection to the database
-            __dataset = pyarrow.dataset.dataset(source=__path, schema=__schema, format='parquet', partitioning=['chain_id'])
+            __dataset = pyarrow.dataset.dataset(source=__base_path, schema=__schema, format='parquet', partitioning=['chain_id'])
             # pass the argument, without forcing
             kwargs['dataset'] = __dataset
             # call handle_transaction
@@ -191,11 +192,12 @@ def export_to_database(chain_id: int=1, dataset: str='contracts', path: str=PATH
     """Creates a decorator for handle_transaction save and index all the data it handles."""
     # init
     __rows = []
-    __path = path.format(chain_id=chain_id, dataset=dataset)
-    # create parent dir
-    os.makedirs(name=__path, exist_ok=True)
+    __partition_path = path.format(chain_id=chain_id, dataset=dataset)
+    __base_path = os.path.dirname(__partition_path)
+    # create dir recursively
+    os.makedirs(name=__partition_path, exist_ok=True)
     # append to the existing batch
-    __chunk = len(os.listdir(__path))
+    __chunk = len(os.listdir(__partition_path))
 
     def __decorator(func: callable) -> callable:
         """Actually wraps the handle_transaction and saves items in the database."""
@@ -204,7 +206,7 @@ def export_to_database(chain_id: int=1, dataset: str='contracts', path: str=PATH
         def __wrapper(*args, **kwargs):
             """Main function called on the logs gathered by the Forta network."""
             # access factory arguments
-            nonlocal __chunk, __rows, __path
+            nonlocal __chunk, __rows, __base_path
             # process the transaction
             __findings = func(*args, **kwargs)
             # parse data
@@ -214,7 +216,7 @@ def export_to_database(chain_id: int=1, dataset: str='contracts', path: str=PATH
             # save to disk
             if len(__rows) >= chunksize:
                 __table = _to_table(rows=__rows, schema=SCHEMAS['contracts'])
-                _write_dataset(table=__table, path=__path, schema=SCHEMAS['contracts'], chunk=__chunk)
+                _write_dataset(table=__table, path=__base_path, schema=SCHEMAS['contracts'], chunk=__chunk)
                 __chunk += 1
                 __rows = []
             # return the findings

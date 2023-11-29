@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.6
+
+### Fixes
+
+- fix IO path for parquet datasets
+
 ## v0.4.3 - v0.4.5
 
 ### Changes
