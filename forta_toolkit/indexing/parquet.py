@@ -1,6 +1,7 @@
 """Save and index the bot data on the disk."""
 
 import functools
+import logging
 import os
 import typing
 
@@ -215,8 +216,13 @@ def export_to_database(chain_id: int=1, dataset: str='contracts', path: str=PATH
             __rows.extend(list_contract_creations_in_traces(traces=__traces, chain_id=chain_id, schema=SCHEMAS['contracts'], compress=compress))
             # save to disk
             if len(__rows) >= chunksize:
+                # cast to parquet format
                 __table = _to_table(rows=__rows, schema=SCHEMAS['contracts'])
+                # write to disk
                 _write_dataset(table=__table, path=__base_path, schema=SCHEMAS['contracts'], chunk=__chunk)
+                # log
+                logging.info('Database: saved {count} contracts to the disk'.format(count=len(__rows)))
+                # reset
                 __chunk += 1
                 __rows = []
             # return the findings

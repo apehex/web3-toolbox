@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.7
+
+### Additions
+
+- log each database write to disk to check bot health
+
 ## v0.4.6
 
 ### Fixes
