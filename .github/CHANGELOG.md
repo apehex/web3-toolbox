@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.4.3 - v0.4.5
+
+### Changes
+
+- relax the depency version requirements to allow installation on older systems
+- process transaction *before* commiting the data to disk
+- refresh the datasets on each call of `handle_transaction`
+
+### Additions
+
+- add `compress` option to the parquet exportation to spare disk space
+- query the contracts dataset and list past deployments at a given address
+
 ## v0.4.2
 
 ### Changes

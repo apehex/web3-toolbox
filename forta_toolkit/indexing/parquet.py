@@ -158,7 +158,9 @@ def import_from_database(chain_id: int=1, dataset: str='contracts', path: str=PA
         def __wrapper(*args, **kwargs):
             """Main function called on the logs gathered by the Forta network."""
             # access factory arguments
-            nonlocal __dataset
+            nonlocal __path, __schema
+            # refresh the connection to the database
+            __dataset = pyarrow.dataset.dataset(source=__path, schema=__schema, format='parquet', partitioning=['chain_id'])
             # pass the argument, without forcing
             kwargs['dataset'] = __dataset
             # call handle_transaction
@@ -185,7 +187,7 @@ def _write_dataset(table: pyarrow.lib.Table, path: str, schema: pyarrow.lib.Sche
         format='parquet',
         existing_data_behavior='overwrite_or_ignore')
 
-def export_to_database(chain_id: int=1, dataset: str='contracts', path: str=PATH, chunksize: int=2**10) -> callable:
+def export_to_database(chain_id: int=1, dataset: str='contracts', path: str=PATH, chunksize: int=2**10, compress: bool=False) -> callable:
     """Creates a decorator for handle_transaction save and index all the data it handles."""
     # init
     __rows = []
@@ -203,18 +205,18 @@ def export_to_database(chain_id: int=1, dataset: str='contracts', path: str=PATH
             """Main function called on the logs gathered by the Forta network."""
             # access factory arguments
             nonlocal __chunk, __rows, __path
+            # process the transaction
+            __findings = func(*args, **kwargs)
             # parse data
             __traces = kwargs.get('traces', [])
             # format the contract creations as database rows
-            __rows.extend(_list_contract_creations(traces=__traces, chain_id=chain_id))
+            __rows.extend(list_contract_creations_in_traces(traces=__traces, chain_id=chain_id, schema=SCHEMAS['contracts'], compress=compress))
             # save to disk
             if len(__rows) >= chunksize:
                 __table = _to_table(rows=__rows, schema=SCHEMAS['contracts'])
                 _write_dataset(table=__table, path=__path, schema=SCHEMAS['contracts'], chunk=__chunk)
                 __chunk += 1
                 __rows = []
-            # process the transaction
-            __findings = func(*args, **kwargs)
             # return the findings
             return __findings
 

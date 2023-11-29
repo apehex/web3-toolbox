@@ -17,7 +17,9 @@
 
 [ ] transparent indexing:
     [x] use Parquet files / DB
-    [x] compatible with cryo
+        [x] compatible with cryo
+        [ ] import / export several datasetS at once (instead of just contracts)
+        [ ] split module: IO + schemas + query + casting
     [ ] Zettablock?
 [ ] use cryo to cache all the data?
 [ ] collect evidence:

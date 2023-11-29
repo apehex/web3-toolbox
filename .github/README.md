@@ -225,7 +225,7 @@ The blockchain data can be indexed in a database with:
 ```python
 import forta_toolkit.indexing.parquet
 
-@forta_toolkit.indexing.parquet.export_to_database(chain_id=1, dataset='contracts', path='.data/contracts/', chunksize=2**10)
+@forta_toolkit.indexing.parquet.export_to_database(chain_id=1, dataset='contracts', path='.data/contracts/', chunksize=2**10, compress=True)
 def handle_transaction(log: TransactionEvent) -> list:
     pass
 ```
@@ -244,7 +244,7 @@ This historic data can then be imported with:
 Which would lead to the final declaration:
 
 ```python
-@forta_toolkit.indexing.parquet.export_to_database(chain_id=1, dataset='contracts', path='.data/contracts/', chunksize=2**10)
+@forta_toolkit.indexing.parquet.export_to_database(chain_id=1, dataset='contracts', path='.data/contracts/', chunksize=2**10, compress=True)
 @forta_toolkit.indexing.parquet.import_from_database(chain_id=CHAIN_ID, dataset='contracts', path='.data/contracts/')
 def handle_transaction(log: TransactionEvent, dataset: 'pyarrow._dataset.FileSystemDataset') -> list:
     pass
