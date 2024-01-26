@@ -4,8 +4,8 @@ import pstats
 import pytest
 import web3
 
-import forta_toolkit.parsing.transaction as fpt
-import forta_toolkit.profiling as fp
+import toolblocks.parsing.transaction as fpt
+import toolblocks.profiling as fp
 import tests.test_data as td
 
 # FIXTURES ####################################################################

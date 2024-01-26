@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "forta-toolkit"
-version = "0.4.7"
-description = "Tools to help with the common problems of Forta bot development"
+name = "toolblocks"
+version = "0.5.0"
+description = "Tools to help with the common problems of blockchain bot development"
 authors = ["apehex <apehex@protonmail.com>"]
 readme = ".github/README.md"
 

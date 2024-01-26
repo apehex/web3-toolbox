@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5.0
+
+### Changes
+
+- renamed the project to `toolblocks`
+
 ## v0.4.7
 
 ### Additions
@@ -44,7 +50,7 @@
 
 ### Changes
 
-- split the `indexing` module by format: `forta_toolkit.indexing.pickle` and `forta_toolkit.indexing.parquet`
+- split the `indexing` module by format: `toolblocks.indexing.pickle` and `toolblocks.indexing.parquet`
 - changed the keys of the `transaction`, `logs` and `traces` to accomodate all the data from the nodes
 - toggle the "0x" prefix on HEX strings (default: no prefix)
 - the prefix is systematically prepended to the parsed data
@@ -55,8 +61,8 @@
 
 ### Changes
 
-- move the module `forta_toolkit.indexing.dump` to `forta_toolkit.indexing`
-- rename the function `serialize` in `forta_toolkit.indexing` to `serialize_io`
+- move the module `toolblocks.indexing.dump` to `toolblocks.indexing`
+- rename the function `serialize` in `toolblocks.indexing` to `serialize_io`
 
 ## v0.3.1
 
@@ -73,7 +79,7 @@
 
 ### Additions
 
-- add the decorator `forta_toolkit.indexing.dump.serialize` to automatically pickle the IO of `handle_transaction`
+- add the decorator `toolblocks.indexing.dump.serialize` to automatically pickle the IO of `handle_transaction`
 
 ## v0.1.23
 
@@ -123,7 +129,7 @@
 
 ### Changes
 
-- renamed `forta_toolkit/parsing/logs.py` to `forta_toolkit/parsing/transaction.py`
+- renamed `toolblocks/parsing/logs.py` to `toolblocks/parsing/transaction.py`
 
 ### Additions
 

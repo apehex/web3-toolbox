@@ -1,6 +1,6 @@
-## Forta Toolkit
+## ToolBlocks
 
-Various tools to help with the common problems of Forta bot development.
+Various tools to help with the common problems of blockchain bot development.
 
 ## Table of Contents
 
@@ -24,26 +24,24 @@ Various tools to help with the common problems of Forta bot development.
 
 ```bash
 # globally
-pip install forta_toolkit
+pip install toolblocks
 
 # in a local environment
-poetry add forta_toolkit
+poetry add toolblocks
 ```
 
 ## Usage
 
 ### Bot setup
 
-The Forta often require initialization steps to adapt to a given chain or use external tools.
-
 The toolkit reads the OS environment and local files to load the settings:
 
 ```python
-import forta_toolkit.parsing.env
+import toolblocks.parsing.env
 
-forta_toolkit.parsing.env.get_bot_version() # reads "package.json" in the parent directory
-forta_toolkit.parsing.env.load_secrets() # read the file "secrets.json", in the parent directory
-forta_toolkit.parsing.env.load_chain_id(provider=w3) # load the chain_id from the env variables or query the provider if it is not set
+toolblocks.parsing.env.get_bot_version() # reads "package.json" in the parent directory
+toolblocks.parsing.env.load_secrets() # read the file "secrets.json", in the parent directory
+toolblocks.parsing.env.load_chain_id(provider=w3) # load the chain_id from the env variables or query the provider if it is not set
 ```
 
 ### Alert statistics
@@ -55,17 +53,17 @@ The main motivation is to improve performance by avoiding web requests.
 To use it, just wrap `handle_block` / `handle_transaction` / `handle_alert` as follows:
 
 ```python
-import forta_toolkit
+import toolblocks
 
-@forta_toolkit.alerts.alert_history(size=10000)
+@toolblocks.alerts.alert_history(size=10000)
 def handle_block(log: BlockEvent) -> list:
     pass
 
-@forta_toolkit.alerts.alert_history(size=10000)
+@toolblocks.alerts.alert_history(size=10000)
 def handle_transaction(log: TransactionEvent) -> list:
     pass
 
-@forta_toolkit.alerts.alert_history(size=10000)
+@toolblocks.alerts.alert_history(size=10000)
 def handle_alert(log: AlertEvent) -> list:
     pass
 ```
@@ -184,10 +182,10 @@ The keys remain `("from", "to", "input", "output")` when the trace type is `suic
 The logging level and message template can be setup with:
 
 ```python
-import forta_toolkit.logging
-import forta_toolkit.parsing.env
+import toolblocks.logging
+import toolblocks.parsing.env
 
-forta_toolkit.logging.setup_logger(level=logging.INFO, version=forta_toolkit.parsing.env.get_bot_version())
+toolblocks.logging.setup_logger(level=logging.INFO, version=toolblocks.parsing.env.get_bot_version())
 ```
 
 Which will produce [messages with the bot version and log level][forta-example-alerts]:
@@ -203,9 +201,9 @@ Which will produce [messages with the bot version and log level][forta-example-a
 The input arguments and the output findings can be automatically saved to the disk with:
 
 ```python
-import forta_toolkit.indexing.dump
+import toolblocks.indexing.dump
 
-@forta_toolkit.indexing.pickle.serialize_io()
+@toolblocks.indexing.pickle.serialize_io()
 def handle_transaction(log: TransactionEvent) -> list:
     pass
 ```
@@ -213,7 +211,7 @@ def handle_transaction(log: TransactionEvent) -> list:
 The decorator accepts a few optional arguments:
 
 ```python
-@forta_toolkit.indexing.pickle.serialize_io(arguments=False, results=True, filter=True, compress=False, path='.data/{alert}/{txhash}/')
+@toolblocks.indexing.pickle.serialize_io(arguments=False, results=True, filter=True, compress=False, path='.data/{alert}/{txhash}/')
 def handle_transaction(log: TransactionEvent) -> list:
     pass
 ```
@@ -223,9 +221,9 @@ def handle_transaction(log: TransactionEvent) -> list:
 The blockchain data can be indexed in a database with:
 
 ```python
-import forta_toolkit.indexing.parquet
+import toolblocks.indexing.parquet
 
-@forta_toolkit.indexing.parquet.export_to_database(chain_id=1, dataset='contracts', path='.data/contracts/', chunksize=2**10, compress=True)
+@toolblocks.indexing.parquet.export_to_database(chain_id=1, dataset='contracts', path='.data/contracts/', chunksize=2**10, compress=True)
 def handle_transaction(log: TransactionEvent) -> list:
     pass
 ```
@@ -238,14 +236,14 @@ The database is saved using the `parquet` file format and using the library `pya
 This historic data can then be imported with:
 
 ```python
-@forta_toolkit.indexing.parquet.import_from_database(chain_id=CHAIN_ID, dataset='contracts', path='.data/contracts/')
+@toolblocks.indexing.parquet.import_from_database(chain_id=CHAIN_ID, dataset='contracts', path='.data/contracts/')
 ```
 
 Which would lead to the final declaration:
 
 ```python
-@forta_toolkit.indexing.parquet.export_to_database(chain_id=1, dataset='contracts', path='.data/contracts/', chunksize=2**10, compress=True)
-@forta_toolkit.indexing.parquet.import_from_database(chain_id=CHAIN_ID, dataset='contracts', path='.data/contracts/')
+@toolblocks.indexing.parquet.export_to_database(chain_id=1, dataset='contracts', path='.data/contracts/', chunksize=2**10, compress=True)
+@toolblocks.indexing.parquet.import_from_database(chain_id=CHAIN_ID, dataset='contracts', path='.data/contracts/')
 def handle_transaction(log: TransactionEvent, dataset: 'pyarrow._dataset.FileSystemDataset') -> list:
     pass
 ```
@@ -259,9 +257,9 @@ The decorator `parse_forta_arguments` processes the input `TransactionEvent` and
 These objects are automatically sanitized and parsed into fixed structures and base types (mostly `int`, HEX `str`, `list` and `bytes`).
 
 ```python
-import forta_toolkit.preprocessing
+import toolblocks.preprocessing
 
-@forta_toolkit.preprocessing.parse_forta_arguments
+@toolblocks.preprocessing.parse_forta_arguments
 def handle_transaction(transaction: dict, logs: list, traces: list) -> list:
     pass
 ```
@@ -279,7 +277,7 @@ The bots have to follow the pace of the blockchain, so they need to process tran
 You can leverage the profiling tools to find the performance bottlenecks in your bots:
 
 ```python
-from forta_toolkit.profiling import test_performances, display_performances
+from toolblocks.profiling import test_performances, display_performances
 
 test_performances(func=handle_transaction, data=some_tx_log)
 display_performances(logpath='./test_performances')
@@ -289,7 +287,7 @@ Otherwise, you can monitor the performances directly when processing mainnet tra
 Just decorate the `handle_block` / `handle_transaction` / `handle_alert` as follows:
 
 ```python
-@forta_toolkit.alerts.profile
+@toolblocks.alerts.profile
 def handle_transaction(tx: TransactionEvent) -> list:
     pass
 ```
@@ -307,10 +305,10 @@ All the above decorators can be mixed and matched.
 However the order in which the decorator are composed matters:
 
 ```python
-@forta_toolkit.profiling.timeit
-@forta_toolkit.alerts.alert_history(size=history_size)
-@forta_toolkit.preprocessing.parse_forta_arguments
-@forta_toolkit.indexing.pickle.serialize_io(arguments=True, results=True)
+@toolblocks.profiling.timeit
+@toolblocks.alerts.alert_history(size=history_size)
+@toolblocks.preprocessing.parse_forta_arguments
+@toolblocks.indexing.pickle.serialize_io(arguments=True, results=True)
 def handle_transaction(transaction: dict, logs: list, traces: list) -> list:
     pass
 ```
@@ -319,8 +317,8 @@ In the configuration above, the `serialize_io` decorator will save each of the `
 However if the decorators were switched:
 
 ```python
-@forta_toolkit.indexing.pickle.serialize_io(arguments=True, results=True)`
-@forta_toolkit.preprocessing.parse_forta_arguments
+@toolblocks.indexing.pickle.serialize_io(arguments=True, results=True)`
+@toolblocks.preprocessing.parse_forta_arguments
 ```
 
 `serialize_io` would save to disk the arguments of the function returned by `parse_forta_arguments`: a single `TransactionEvent` would be serialized to the disk.

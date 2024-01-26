@@ -1,8 +1,8 @@
 import itertools
 import pytest
 
-import forta_toolkit.parsing.common as fpc
-import forta_toolkit.parsing.traces as fpt
+import toolblocks.parsing.common as fpc
+import toolblocks.parsing.traces as fpt
 import tests.test_data as td
 
 # FIXTURES ####################################################################

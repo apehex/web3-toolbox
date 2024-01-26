@@ -9,10 +9,10 @@ import eth_utils.crypto
 import pyarrow.dataset
 import pyarrow.lib
 
-import forta_toolkit.parsing.common
-import forta_toolkit.parsing.logs
-import forta_toolkit.parsing.traces
-import forta_toolkit.parsing.transaction
+import toolblocks.parsing.common
+import toolblocks.parsing.logs
+import toolblocks.parsing.traces
+import toolblocks.parsing.transaction
 
 # CONSTANTS ###################################################################
 
@@ -108,16 +108,16 @@ def cast_trace_to_contracts_dataset_row(trace: dict, chain_id: int=1, schema: py
     """Format a transaction trace as a contract record."""
     __row = {__k: None for __k in schema.names}
     # hash the bytecode
-    __creation_bytecode = forta_toolkit.parsing.common.to_bytes(trace.get('action_init', None))
-    __creation_bytecode_hash = forta_toolkit.parsing.common.to_bytes(eth_utils.crypto.keccak(primitive=__creation_bytecode))
-    __runtime_bytecode = forta_toolkit.parsing.common.to_bytes(trace.get('result_code', None))
-    __runtime_bytecode_hash = forta_toolkit.parsing.common.to_bytes(eth_utils.crypto.keccak(primitive=__runtime_bytecode))
+    __creation_bytecode = toolblocks.parsing.common.to_bytes(trace.get('action_init', None))
+    __creation_bytecode_hash = toolblocks.parsing.common.to_bytes(eth_utils.crypto.keccak(primitive=__creation_bytecode))
+    __runtime_bytecode = toolblocks.parsing.common.to_bytes(trace.get('result_code', None))
+    __runtime_bytecode_hash = toolblocks.parsing.common.to_bytes(eth_utils.crypto.keccak(primitive=__runtime_bytecode))
     # fill the fields
     __row['chain_id'] = chain_id
-    __row['block_number'] = forta_toolkit.parsing.common.to_int(trace.get('block_number', None))
-    __row['transaction_hash'] = forta_toolkit.parsing.common.to_bytes(trace.get('transaction_hash', None))
-    __row['deployer'] = forta_toolkit.parsing.common.to_bytes(trace.get('action_from', None))
-    __row['contract_address'] = forta_toolkit.parsing.common.to_bytes(trace.get('result_address', None))
+    __row['block_number'] = toolblocks.parsing.common.to_int(trace.get('block_number', None))
+    __row['transaction_hash'] = toolblocks.parsing.common.to_bytes(trace.get('transaction_hash', None))
+    __row['deployer'] = toolblocks.parsing.common.to_bytes(trace.get('action_from', None))
+    __row['contract_address'] = toolblocks.parsing.common.to_bytes(trace.get('result_address', None))
     __row['create_index'] = None
     __row['init_code'] = b'' if compress else __creation_bytecode # only store the hash when compressing
     __row['init_code_hash'] = __creation_bytecode_hash

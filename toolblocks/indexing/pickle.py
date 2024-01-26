@@ -7,10 +7,10 @@ import typing
 
 import pyarrow
 
-import forta_toolkit.parsing.common
-import forta_toolkit.parsing.logs
-import forta_toolkit.parsing.traces
-import forta_toolkit.parsing.transaction
+import toolblocks.parsing.common
+import toolblocks.parsing.logs
+import toolblocks.parsing.traces
+import toolblocks.parsing.transaction
 
 # CONSTANTS ###################################################################
 
@@ -46,9 +46,9 @@ def serialize_io(arguments: bool=True, results: bool=True, filter: bool=True, co
             # dump each finding separately
             for __f in __findings:
                 # compute the path
-                __id = forta_toolkit.parsing.common.get_field(dataset=__f, keys=('alert_id',), default='')
-                __metadata = forta_toolkit.parsing.common.get_field(dataset=__f, keys=('metadata',), default={})
-                __hash = forta_toolkit.parsing.common.add_hex_prefix(forta_toolkit.parsing.common.get_field(dataset=__metadata, keys=('tx_hash', 'txhash', 'transaction_hash', 'hash',), default=''))
+                __id = toolblocks.parsing.common.get_field(dataset=__f, keys=('alert_id',), default='')
+                __metadata = toolblocks.parsing.common.get_field(dataset=__f, keys=('metadata',), default={})
+                __hash = toolblocks.parsing.common.add_hex_prefix(toolblocks.parsing.common.get_field(dataset=__metadata, keys=('tx_hash', 'txhash', 'transaction_hash', 'hash',), default=''))
                 __path = path.format(alert_id=__id, transaction_hash=__hash)
                 # dump the inputs
                 if arguments:

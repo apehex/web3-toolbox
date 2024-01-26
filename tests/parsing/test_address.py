@@ -1,6 +1,6 @@
 import pytest
 
-import forta_toolkit.parsing.address as fpa
+import toolblocks.parsing.address as fpa
 
 # FIXTURES ####################################################################
 

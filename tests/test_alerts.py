@@ -2,7 +2,7 @@ import math
 import pytest
 import random
 
-from forta_toolkit.alerts import (
+from toolblocks.alerts import (
     init_alert_history,
     update_alert_history,
     calculate_alert_rate,
